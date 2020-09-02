@@ -1,0 +1,138 @@
+<html>
+    <body>
+        <p>Home Price ($):<br>
+            <input type="number" id="HomePrice" name="Home Price" value="100000">
+        </p>
+        <p>
+            Interest rate (%):<br>
+            <input type="number" id="InterestRate" name="Interest rate" value="2.75" size="4">%
+        </p>
+        <p>
+            Down payment amount:
+            <input type="radio" id="DownPaymentMethodPercentage" name="Down payment type" value="Percentage (%)" checked oninput="OnPercentSelected()">
+            <label for="DownPaymentMethodPercentage">Percentage (%)</label>
+            <input type="radio" id="DownPaymentMethodDollars" name="Down payment type" value="Dollars ($)" oninput="OnDollarSelected()">
+            <label for="DownPaymentMethodDollars">Dollars ($)</label>
+            <br>   
+            <div id="downpaymentinput">
+                <input type="range" id="DownPaymentAmount" name="Down Payment Amount" min="0" max="100" value="20">
+                
+            </div>
+            <label for="DownPaymentAmount" id="DownPaymentAmountLabel">%</label>
+        </p>
+        <p>
+            Mortgage term: <label for="MortgageTerm" id="MortgageTermLabel"></label>
+            <br>
+            <input type="range" id="MortgageTerm" name="Mortgage Term" min="5" max="30" value="30" size="2">
+            
+        </p>
+        <p>
+            Mortgage payment:<br>
+            <input type="text" id="PaymentAmount" readonly="readonly">
+        </p>
+        <p id="debug"></p>
+        <div id="RJSStartingBalance"></div>
+        <p id="output"></p>
+        <script>
+            function OnPercentSelected(){
+                document.getElementById("downpaymentinput").innerHTML = "<input type=\"range\" id=\"DownPaymentAmount\" name=\"Down Payment Amount\" min=\"0\" max=\"100\" value=\"20\">";
+                let amountelement = document.getElementById("DownPaymentAmount");
+                amountelement.addEventListener("input",()=>{RenderDownPayment(); RenderPaymentAmount();});
+                amountelement.addEventListener("focusin",()=>{OnGainFocus(amountelement);});
+                amountelement.addEventListener("focusout",()=>{OnLoseFocus(amountelement);});
+            }
+            function OnDollarSelected(){
+                let value = Math.floor(document.getElementById("DownPaymentAmount").value/100 * document.getElementById("HomePrice").value);
+                document.getElementById("downpaymentinput").innerHTML = "<input type=\"number\" id=\"DownPaymentAmount\" name=\"Down Payment Amount\" min=\"0\" max=\""+document.getElementById("HomePrice").value + "\" value=\"" + value + "\">";
+                let amountelement = document.getElementById("DownPaymentAmount");
+                amountelement.addEventListener("input",()=>{RenderDownPayment(); RenderPaymentAmount();});
+                amountelement.addEventListener("focusin",()=>{OnGainFocus(amountelement);});
+                amountelement.addEventListener("focusout",()=>{OnLoseFocus(amountelement);});
+                
+            }
+            function RenderPaymentAmount(){
+                let homeprice = document.getElementById("HomePrice").value;
+                let downpayment = 0;
+
+                // If the down payment is set as a percentage of the home price, we need to convert that to a dollar value.
+                if(document.getElementById("DownPaymentMethodPercentage").checked){
+                    downpayment = homeprice * document.getElementById("DownPaymentAmount").value / 100;
+                } else{
+                    downpayment = document.getElementById("DownPaymentAmount").value;
+                }
+                let loanAmount = homeprice - downpayment;
+                // the 1200 is from 12 payments per year (to calculate the monthly interest amortized over a year)
+                // the 100 is because the interest rate is entered as a whole value and needs to be converted to a decimal.
+                let r = document.getElementById("InterestRate").value / 1200;
+                // we multiply this by 12 because there are 12 payments per year of the loan term (1 per year)
+                let n = document.getElementById("MortgageTerm").value * 12;
+                let rate = (1+r)**n;
+                let paymentamount = loanAmount*(r*rate/(rate-1));
+                document.getElementById("PaymentAmount").value = formatMoney(paymentamount);
+            }
+            function DefaultValueIfEmpty(element){
+                if(element.value=="" || isNaN(element.value) || element.value==null){
+                    document.getElementById(element.id).value = element.defaultValue;
+                }
+            }
+            function RenderDownPayment(){
+                let downpaymentpercent = document.getElementById("DownPaymentMethodPercentage");
+                let downpaymentdollars = document.getElementById("DownPaymentMethodDollars");
+                let downpaymentamount = document.getElementById("DownPaymentAmount");
+                if (downpaymentdollars.checked) {
+                    if(parseFloat(document.getElementById("DownPaymentAmount").value) > parseFloat(document.getElementById("HomePrice").value)){
+                        document.getElementById("DownPaymentAmount").value = document.getElementById("HomePrice").value;
+                        console.log("set down payment to home price.");
+                    }
+                    let downpercent = downpaymentamount.value / document.getElementById("HomePrice").value;
+                    document.getElementById("DownPaymentAmountLabel").innerHTML = 
+                    formatMoney(downpaymentamount.value)
+                    + " (" 
+                    + (downpercent * 100).toLocaleString(undefined, { minimumIntegerDigits: 2
+                                                                    , maximumFractionDigits: 2
+                                                                    , minimumFractionDigits: 2
+                                                                    , useGrouping: false })
+                    + "%)";
+                }
+                if (downpaymentpercent.checked) {
+                    document.getElementById("DownPaymentAmountLabel").innerHTML = downpaymentamount.value + '%';
+                }
+            }
+            function RenderMortgageTerm(){
+                document.getElementById("MortgageTermLabel").innerHTML = document.getElementById("MortgageTerm").value + " years";
+            }
+            function OnGainFocus(element){
+                document.getElementById(element.id).style.backgroundColor = "yellow";
+            }
+            function OnLoseFocus(element){
+                document.getElementById(element.id).style.backgroundColor = "";
+                DefaultValueIfEmpty(element);
+            }
+            function formatMoney(number) {
+                return new Intl.NumberFormat('en-US', {style: 'currency', currency:'USD'}).format(number);
+            }
+            ["HomePrice","InterestRate","MortgageTerm","DownPaymentMethodPercentage","DownPaymentMethodDollars","DownPaymentAmount", "MortgageTermLabel"]
+            .forEach((item, index, array)=>{
+                let element = document.getElementById(item);
+                element.addEventListener("focusin", ()=>{
+                    OnGainFocus(element);
+                });
+                element.addEventListener("focusout", ()=>{
+                    OnLoseFocus(element);
+                });
+                // re-compute the ending balance continually as the user changes inputs.
+                // This will cause it to recalculate for each digit entered or deleted in the form.
+                element.addEventListener("input",()=>{
+                    RenderDownPayment();
+                    RenderPaymentAmount();
+                });
+            });
+            document.getElementById("MortgageTerm").addEventListener("input", () => { RenderMortgageTerm(); RenderPaymentAmount(); });
+            RenderDownPayment();
+            RenderMortgageTerm();
+        </script>
+    
+
+
+    </body>
+</html>
