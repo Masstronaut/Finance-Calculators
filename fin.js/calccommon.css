@@ -1,0 +1,117 @@
+h1,
+label,
+input {
+    font-family: 'roboto', sans-serif;
+    font-weight: normal;
+    transition: all 0.3s ease-in-out;
+}
+
+h1 {
+    height: auto;
+    width: 100%;
+    padding: 10px;
+    font-size: 20px;
+    background: #4527A0;
+    color: white;
+    text-align: center;
+    line-height: 125%;
+    border-radius: 3px 3px 0 0;
+    box-shadow: 0 2px 5px 1px rgba(0, 0, 0, 0.2);
+}
+
+.Calculator {
+    box-sizing: border-box;
+    width: 300px;
+    margin: 5% auto 0;
+    box-shadow: 2px 2px 5px 1px rgba(0, 0, 0, 0.2);
+    padding-bottom: 30px;
+    border-radius: 3px;
+}
+.Calculator h1 {
+    box-sizing: border-box;
+    padding: 10px 20px;
+}
+input:focus + label, input:not(:placeholder-shown) + label{
+    color: #3f51b5;
+    transition: color 200ms cubic-bezier(0.0,0,0.2,1), transform 200ms cubic-bezier(0.0,0,0.2,1) 0ms;
+    transform: translate(0, 1.5px) scale(0.75);
+    transform-origin: top left;
+    top: 0;
+    left: 0;
+    position: absolute;
+    display: block;
+    padding: 0;
+    font-size: 1rem;
+    font-family: "Roboto", "Helvetica", "Arial", sans-serif;
+    font-weight: 400;
+    line-height: 1;
+    letter-spacing: 0.00938em;
+}
+input:not(:focus):not(:placeholder-shown) + label{
+    color: rgba(0, 0, 0, 0.54);
+    transition: color 200ms cubic-bezier(0.0,0,0.2,1), transform 200ms cubic-bezier(0.0,0,0.2,1) 0ms;
+    transform: translate(0, 1.5px) scale(0.75);
+    transform-origin: top left;
+    top: 0;
+    left: 0;
+    position: absolute;
+    display: block;
+    padding: 0;
+    font-size: 1rem;
+    font-family: "Roboto", "Helvetica", "Arial", sans-serif;
+    font-weight: 400;
+    line-height: 1;
+    letter-spacing: 0.00938em;
+}
+label{
+    transition: color 200ms cubic-bezier(0.0,0,0.2,1) 0ms,transform 200ms cubic-bezier(0.0,0,0.2,1) 0ms;
+    top: 0;
+    left: 0;
+    position: absolute;
+    transform: translate(0, 100%) scale(1);
+    display: inline-block;
+    transform-origin: top left;
+    color:rgba(0, 0, 0, 0.54);
+    padding: 0;
+    font-size: 1rem;
+    font-family: "Roboto", "Helvetica", "Arial", sans-serif;
+    font-weight: 400;
+    line-height: 1;
+    letter-spacing: 0.00938em;
+    pointer-events: none;
+}
+:focus {
+    outline: none;
+}
+.CalculatorField {
+    position: relative;
+    margin: 10px 10%;
+    font-size: 16px;
+}
+.NumberEntry,
+.NumberEntry~.FormInputUnderline {
+    width: 100%;
+}
+
+.NumberEntry {
+    border: 0;
+    padding: 13px 0 2px 0;
+    border-bottom: 2px solid #cccccc;
+    font-size: 16px;
+    width: 100%;
+}
+
+.NumberEntry~.FormInputUnderline {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 0;
+    height: 2px;
+    background-color: #4527A0;
+    transition: 0.2s width ease-in-out;
+}
+
+.NumberEntry:hover~.FormInputUnderline {
+    width: 100%;
+    transition: 0.35s width ease-in-out;
+}

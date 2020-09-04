@@ -1,83 +1,67 @@
 <html>
-    <body>
-        <p>Initial Balance ($):<br>
-            <input type="number" id="StartingBalance" name="Starting balance">
-        </p>
-        <p>
-            Interest rate (%):<br>
-            <input type="number" id="InterestRate" name="Interest rate" value="10" size="4">%
-        </p>
-        <p>
-            Inflation rate (%):<br>
-            <input type="number" id="InflationRate" name="Inflation rate" value="2.5" size="4">%
-        </p>
-        <p>
-            Compounding period length (years):<br>
-            <input type="number" id="CompoundingPeriod" name="Compounding period" value="10" size="4"> 
-        </p>
-        <p>
-            Ending balance:<br>
-            <input type="text" id="EndingBalance" readonly="readonly">
-        </p>
-        <div id="RJSStartingBalance"></div>
-        <p id="output"></p>
-        <script>
-            function DefaultValueIfEmpty(element){
-                if(element.value=="" || isNaN(element.value) || element.value==null){
-                    document.getElementById(element.id).value = element.defaultValue;
-                }
-            }
-            function ComputeCompoundInterest(Data){
-                var effectiveGrowthRate = Data.InterestRate - Data.InflationRate;
-                return Data.StartingBalance*(1+effectiveGrowthRate)**Data.CompoundingPeriod;
 
-            }
-            function OnGainFocus(element){
-                document.getElementById(element.id).style.backgroundColor = "yellow";
-            }
-            function OnLoseFocus(element){
-                document.getElementById(element.id).style.backgroundColor = "";
-                DefaultValueIfEmpty(element);
-                var data = {};
-                data.StartingBalance = document.getElementById("StartingBalance").value;
-                data.InterestRate = document.getElementById("InterestRate").value/100;
-                data.InflationRate = document.getElementById("InflationRate").value/100;
-                data.CompoundingPeriod = document.getElementById("CompoundingPeriod").value;
-                document.getElementById("EndingBalance").value = formatMoney(ComputeCompoundInterest(data));
-            }
-            function formatMoney(number) {
-                return new Intl.NumberFormat('en-US', {style: 'currency', currency:'USD'}).format(number);
-            }
-            // Event listeners for form fields gaining focus
-            document.getElementById("StartingBalance").addEventListener("focusin", function() { 
-                OnGainFocus(this);
-            });
-            document.getElementById("InterestRate").addEventListener("focusin", function() { 
-                OnGainFocus(this);
-            });
-            document.getElementById("InflationRate").addEventListener("focusin", function() { 
-                OnGainFocus(this);
-            });
-            document.getElementById("CompoundingPeriod").addEventListener("focusin", function() { 
-                OnGainFocus(this);
-            });
+<head>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400&display=swap" rel="stylesheet">
+    <link href="calccommon.css" type="text/css" rel="stylesheet">
+    <script type="text/javascript" src="calccommon.js"></script>
+</head>
 
-            // Event listeners for form fields losing focus
-            document.getElementById("StartingBalance").addEventListener("focusout", function() { 
-                OnLoseFocus(this);
-            });
-            document.getElementById("InterestRate").addEventListener("focusout", function() { 
-                OnLoseFocus(this);
-            });
-            document.getElementById("InflationRate").addEventListener("focusout", function() { 
-                OnLoseFocus(this);
-            });
-            document.getElementById("CompoundingPeriod").addEventListener("focusout", function() { 
-                OnLoseFocus(this);
-            });
-        </script>
-    
+<body>
+    <form class="Calculator">
+        <h1>Compound interest calculator</h1>
+        <div class="CalculatorField">
+            <input type="number" class="NumberEntry" id="StartingBalance" name="Starting balance" placeholder=" ">
+            <label for="NumberEntry">Initial balance</label>
+            <span class="FormInputUnderline"></span>
+        </div>
+        <div class="CalculatorField">
+            <input type="number" class="NumberEntry" id="InterestRate" name="Interest-rate" placeholder=" ">
+            <label for="NumberEntry">Interest rate (%)</label>
+            <span class="FormInputUnderline"></span>
+        </div>
+        <div class="CalculatorField">
+            <input type="number" class="NumberEntry" id="InflationRate" name="Inflation-rate" placeholder=" ">
+            <label for="NumberEntry">Inflation rate (%)</label>
+            <span class="FormInputUnderline"></span>
+        </div>
+        <div class="CalculatorField" title="How many years should the interest be compounded for?">
+            <input type="number" class="NumberEntry" id="CompoundingPeriod" name="Compounding period" placeholder=" ">
+            <label for="NumberEntry">Years</label>
+            <span class="FormInputUnderline"></span>
+        </div>
+        <div class="CalculatorField">
+            <input type="text" class="NumberEntry" id="EndingBalance" readonly="readonly" placeholder=" ">
+            <label for="NumberEntry">Ending balance</label>
+            <span class="FormInputUnderline"></span>
+        </div>
+    </form>
+    <script>
+       
+        function Render() {
+            var data = {};
+            data.StartingBalance = ValidateNumber(document.getElementById("StartingBalance").value);
+            data.InterestRate = ValidateNumber(document.getElementById("InterestRate").value);
+            data.InflationRate = ValidateNumber(document.getElementById("InflationRate").value)
+            data.CompoundingPeriod = ValidateNumber(document.getElementById("CompoundingPeriod").value);
+            if(!isNaN(data.StartingBalance) && !isNaN(data.CompoundingPeriod) && !isNaN(data.InterestRate) && !isNaN(data.InflationRate)){
+                data.InterestRate /= 100;
+                data.InflationRate /= 100;
+            }else{
+                return;
+            }
+            
+            let interest = CalculateCompoundInterest(data);
+            console.log(interest);
+            document.getElementById("EndingBalance").value = formatMoney(interest);
+        }
+
+        [].forEach.call(document.getElementsByClassName("NumberEntry"),(item) => {
+            item.addEventListener("input", Render);
+        });
+    </script>
 
 
-    </body>
+
+</body>
+
 </html>

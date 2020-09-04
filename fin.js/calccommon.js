@@ -39,24 +39,33 @@ function USTaxBrackets() {
     return brackets;
 }
 function CalculateTax(income, deduction) {
+    deduction = parseFloat(deduction);
+    income = parseFloat(income);
+    if(isNaN(deduction) || deduction == "" || deduction==null) {deduction = 0;}
+    if(isNaN(income) || income == "" || income == null){ return null; }
     let brackets = USTaxBrackets();
-    let untaxedincome = income - deduction;
+    let untaxedincome = income - Math.max(deduction,12400);
     let tax = 0.0;
     brackets.forEach(function (item, index, array) {
         if (untaxedincome < 0) { return; }
         tax += Math.min(untaxedincome, item.max - item.min) * item.rate;
         untaxedincome -= (item.max - item.min);
     });
-    return tax;
+    let result = {};
+    result.pretax = income;
+    result.taxamount = tax;
+    result.posttax = income-tax;
+    result.deduction = deduction;
+    return result;
 }
 function formatMoney(number) {
     return new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(number);
 }
 function OnFocusIn(element) {
-    document.getElementById(element.id).style.backgroundColor = "#EEEEEE";
+    // document.getElementById(element.id).style.backgroundColor = "#EEEEEE";
 }
 function OnFocusOut(element) {
-    document.getElementById(element.id).style.backgroundColor = "#F5F5F5";
+    // document.getElementById(element.id).style.backgroundColor = "#F5F5F5";
     if (DefaultValueIfEmpty(element)) { Render(); }
 }
 function Render() {
@@ -75,8 +84,12 @@ function DefaultValueIfEmpty(element) {
     return false;
 }
 function CalculatePreTax(income, deduction){
+    deduction = parseFloat(deduction);
+    income = parseFloat(income);
+    if(isNaN(deduction) || deduction == "" || deduction==null) {deduction = 0;}
+    if(isNaN(income) || income == "" || income == null){ return null; }
     let brackets = USTaxBrackets();
-    let remainingtaxedincome = parseFloat(income)-deduction;
+    let remainingtaxedincome = income-Math.max(deduction,12400);
     let taxbill = 0;
     brackets.forEach((item, index, array) =>{
         if(remainingtaxedincome <= 0) return;
@@ -85,9 +98,20 @@ function CalculatePreTax(income, deduction){
         taxbill += (incomeinbracket)/(1-item.rate) - incomeinbracket;
     });
     let result = {};
-    result.pretax = parseFloat(income) + taxbill;
+    result.pretax = income + taxbill;
     result.taxamount = taxbill;
-    result.posttax = parseFloat(income);
-    result.deduction = parseFloat(deduction);
+    result.posttax = income;
+    result.deduction = deduction;
     return result;
+}
+function CalculateCompoundInterest(data) {
+    var effectiveGrowthRate = data.InterestRate - data.InflationRate;
+    return data.StartingBalance * (1 + effectiveGrowthRate) ** data.CompoundingPeriod;
+}
+function ValidateNumber(input){
+    if(input == "" || isNaN(parseFloat(input)) || null == input){
+        return NaN;
+    }else{
+        return parseFloat(input);
+    }
 }

@@ -1,107 +1,53 @@
 <html>
 <title>Income Tax Calculator 2020</title>
 
-<body>
-    <p>
-        Pre-tax income ($):<br>
-        <input type="number" id="income" name="Starting balance" value="50000">
-    </p>
-    <div title="The standard deduction amount in 2020 is $12,400. If you are not itemizing, leave the value at 12400.">
-        <p>
-            Tax deduction total ($):<br>
-            <input type="number" id="deduction" value="12400">
-        </p>
-    </div>
+<head>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400&display=swap" rel="stylesheet">
+    <link href="calccommon.css" type="text/css" rel="stylesheet">
+    <script type="text/javascript" src="calccommon.js"></script>
+</head>
 
-    <p>
-        Tax bill ($):<br>
-        <input type="text" id="TaxAmount" readonly="readonly">
-    </p>
-    <p>
-        Post-tax income ($):<br>
-        <input type="text" id="PostTaxAmount" readonly="readonly">
-    </p>
-    <div id="RJSStartingBalance"></div>
-    <p id="output"></p>
+<body>
+    <form class="Calculator">
+        <h1>2020 Income tax calculator</h1>
+        <div class="CalculatorField">
+            <input type="number" class="NumberEntry" id="income" name="Starting balance" placeholder=" ">
+            <label for="NumberEntry" class="InputLabel">Pre-tax income</label>
+            <span class="FormInputUnderline"></span>
+        </div>
+        <div class="CalculatorField" title="The standard deduction amount in 2020 is $12,400. If you are not itemizing, leave the value at 12400.">
+            <input type="number" class="NumberEntry" id="deduction" placeholder=" " value="12400">
+            <label for="NumberEntry" class="InputLabel">Tax deductions</label>
+            <span class="FormInputUnderline"></span>
+        </div>
+        <div class="CalculatorField">
+            <input type="text" class="NumberEntry" id="TaxAmount" readonly="readonly" placeholder=" ">
+            <label for="NumberEntry" class="InputLabel">Tax amount</label>
+            <span class="FormInputUnderline"></span>    
+        </div>
+        <div class="CalculatorField">
+            <input type="text" class="NumberEntry" id="PostTaxAmount" readonly="readonly" placeholder=" ">
+            <label for="NumberEntry" class="InputLabel">Post-tax income</label>
+            <span class="FormInputUnderline"></span>    
+        </div>
+    </form>
     <script>
-        function USTaxBrackets() {
-            return [{
-                "rate": .10,
-                "min": 0,
-                "max": 9875.00
-            }, {
-                "rate": .12,
-                "min": 9875.00,
-                "max": 40125.00
-            }, {
-                "rate": .22,
-                "min": 40125.00,
-                "max": 85525.00
-            }, {
-                "rate": .24,
-                "min": 85525.00,
-                "max": 163300.00
-            }, {
-                "rate": .32,
-                "min": 163300.00,
-                "max": 207350.00
-            }, {
-                "rate": .32,
-                "min": 207350.00,
-                "max": 518400.00
-            }, {
-                "rate": .35,
-                "min": 207350.00,
-                "max": 518400.00
-            }, {
-                "rate": .37,
-                "min": 518400.00,
-                "max": Infinity
-            },
-            ];
-        }
-        function CalculateTax(income, deduction) {
-            let brackets = USTaxBrackets();
-            let untaxedincome = income - deduction;
-            let tax = 0.0;
-            brackets.forEach(function (item, index, array) {
-                if (untaxedincome < 0) { return; }
-                tax += Math.min(untaxedincome, item.max - item.min) * item.rate;
-                untaxedincome -= (item.max - item.min);
-            });
-            return tax;
-        }
-        function formatMoney(number) {
-            return new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(number);
-        }
-        function OnGainFocus(element) {
-            document.getElementById(element.id).style.backgroundColor = "yellow";
-        }
-        function OnLoseFocus(element) {
-            document.getElementById(element.id).style.backgroundColor = "";
-            if (DefaultValueIfEmpty(element)) { Render(); }
-        }
         function Render() {
             let income = document.getElementById("income").value;
             let deduction = document.getElementById("deduction").value;
             let tax = CalculateTax(income, deduction);
             let taxedincome = income - tax;
-            document.getElementById("TaxAmount").value = formatMoney(tax);
-            document.getElementById("PostTaxAmount").value = formatMoney(taxedincome);
-        }
-        function DefaultValueIfEmpty(element) {
-            if (element.value == "" || isNaN(element.value) || element.value == null) {
-                document.getElementById(element.id).value = element.defaultValue;
-                return true;
+            if (tax != null) {
+                document.getElementById("TaxAmount").value = formatMoney(tax.taxamount);
+                document.getElementById("PostTaxAmount").value = formatMoney(tax.posttax);
+            } else {
+                document.getElementById("TaxAmount").value = "";
+                document.getElementById("PostTaxAmount").value = "";
             }
-            return false;
         }
         // Event listeners for form fields gaining focus
-        ["income", "deduction"].forEach(function (item, index, array) {
-            let element = document.getElementById(item);
-            element.addEventListener("focusin", () => { OnGainFocus(element) });
-            element.addEventListener("focusout", () => { OnLoseFocus(element) });
-            element.addEventListener("input", () => { Render(); });
+        [].forEach.call(document.getElementsByClassName("NumberEntry"),(item) => {
+            item.addEventListener("input", Render);
         });
         Render();
     </script>

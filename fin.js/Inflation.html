@@ -1,65 +1,63 @@
 <html>
-    <body>
-        <p>Initial Balance ($):<br>
-            <input type="number" id="StartingBalance" name="Starting balance" value="1000">
-        </p>
-        <p>
-            Inflation rate (%):<br>
-            <input type="number" id="InflationRate" name="Inflation rate" value="2.5" size="4">%
-        </p>
-        <p>
-            Years:<br>
-            <input type="number" id="CompoundingPeriod" name="Compounding period" value="10" size="2"> 
-        </p>
-        <p>
-            Ending balance:<br>
-            <input type="text" id="EndingBalance" readonly="readonly">
-        </p>
-        <div id="RJSStartingBalance"></div>
-        <p id="output"></p>
-        <script>
-            function DefaultValueIfEmpty(element){
-                if(element.value=="" || isNaN(element.value) || element.value==null){
-                    document.getElementById(element.id).value = element.defaultValue;
-                }
+
+<head>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400&display=swap" rel="stylesheet">
+    <link href="calccommon.css" type="text/css" rel="stylesheet">
+    <script type="text/javascript" src="calccommon.js"></script>
+</head>
+
+<body>
+    <form class="Calculator">
+        <h1>Inflation calculator</h1>
+        <div class="CalculatorField">
+            <input type="number" class="NumberEntry" id="StartingBalance" name="Starting balance" placeholder=" ">
+            <label for="NumberEntry">Initial balance</label>
+            <span class="FormInputUnderline"></span>
+        </div>
+        </div>
+        <div class="CalculatorField">
+            <input type="number" class="NumberEntry" id="InflationRate" name="Inflation-rate" placeholder=" ">
+            <label for="NumberEntry">Inflation rate (%)</label>
+            <span class="FormInputUnderline"></span>
+        </div>
+        <div class="CalculatorField" title="How many years should the interest be compounded for?">
+            <input type="number" class="NumberEntry" id="CompoundingPeriod" name="Compounding period" placeholder=" ">
+            <label for="NumberEntry">Years</label>
+            <span class="FormInputUnderline"></span>
+        </div>
+        <div class="CalculatorField">
+            <input type="text" class="NumberEntry" id="EndingBalance" readonly="readonly" placeholder=" ">
+            <label for="NumberEntry">Ending balance</label>
+            <span class="FormInputUnderline"></span>
+        </div>
+    </form>
+    <script>
+        function Render() {
+            var data = {};
+            data.StartingBalance = ValidateNumber(document.getElementById("StartingBalance").value);
+            data.InflationRate = ValidateNumber(document.getElementById("InflationRate").value)
+            data.CompoundingPeriod = ValidateNumber(document.getElementById("CompoundingPeriod").value);
+            if(!isNaN(data.StartingBalance) && !isNaN(data.CompoundingPeriod) && !isNaN(data.InflationRate)){
+                data.InflationRate /= 100;
+                data.InterestRate = 0.0;
+            }else{
+                return;
             }
-            function Render(){
-                var data = {};
-                data.StartingBalance = document.getElementById("StartingBalance").value;
-                data.InflationRate = document.getElementById("InflationRate").value/100;
-                data.CompoundingPeriod = document.getElementById("CompoundingPeriod").value;
-                var postinflation = data.StartingBalance*(1-data.InflationRate)**data.CompoundingPeriod;
-                document.getElementById("EndingBalance").value = formatMoney(postinflation);
-                return postinflation;
-            }
-            function OnGainFocus(element){
-                document.getElementById(element.id).style.backgroundColor = "yellow";
-            }
-            function OnLoseFocus(element){
-                document.getElementById(element.id).style.backgroundColor = "";
-                DefaultValueIfEmpty(element);
-            }
-            function formatMoney(number) {
-                return new Intl.NumberFormat('en-US', {style: 'currency', currency:'USD'}).format(number);
-            }
-            ["StartingBalance","InflationRate","CompoundingPeriod"].forEach((item, index, array)=>{
-                let element = document.getElementById(item);
-                element.addEventListener("focusin", ()=>{
-                    OnGainFocus(element);
-                });
-                element.addEventListener("focusout", ()=>{
-                    OnLoseFocus(element);
-                });
-                // re-compute the ending balance continually as the user changes inputs.
-                // This will cause it to recalculate for each digit entered or deleted in the form.
-                element.addEventListener("input",()=>{
-                    Render();
-                });
-            });
-            Render();
-        </script>
-    
+            
+            let interest = CalculateCompoundInterest(data);
+            console.log(interest);
+            document.getElementById("EndingBalance").value = formatMoney(interest);
+        
+        }
+
+        [].forEach.call(document.getElementsByClassName("NumberEntry"),(item) => {
+            item.addEventListener("input", Render);
+        });
+        Render();
+    </script>
 
 
-    </body>
+
+</body>
+
 </html>

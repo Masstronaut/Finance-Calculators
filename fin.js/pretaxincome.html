@@ -1,61 +1,56 @@
 <html>
-<title>Income Tax Calculator 2020</title>
-<head>
-    <style>
-        input {
-            padding: 5px;
-            margin: 5px 0;
-            outline: none;
-            border-color: transparent;
-            border-bottom: 2px solid #95a5a6;
-        }
-        input:hover{
-            border-bottom: 2px solid #212121;
-        }
-        input:focus,
-        input:active {
-            border-bottom: 3px solid #3498db;
-        }
-    </style>
-</head>
-<body>
-    <p>
-        Desired post-tax income ($):<br>
-        <input type="number" id="income" name="Starting balance" value="50000">
-    </p>
-    <div title="The standard deduction amount in 2020 is $12,400. If you are not itemizing deductions, use $12,400.">
-        <p>
-            Tax deduction total ($):<br>
-            <input type="number" id="deduction" value="12400">
-        </p>
-    </div>
+<title>Inverse Tax Calculator 2020</title>
 
-    <p>
-        Tax bill ($):<br>
-        <input type="text" id="TaxAmount" readonly="readonly">
-    </p>
-    <p>
-        Pre-tax income needed ($):<br>
-        <input type="text" id="PreTaxAmount" readonly="readonly">
-    </p>
-    <div id="RJSStartingBalance"></div>
-    <p id="output"></p>
+<head>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400&display=swap" rel="stylesheet">
+    <link href="calccommon.css" type="text/css" rel="stylesheet">
     <script type="text/javascript" src="calccommon.js"></script>
+</head>
+
+<body>
+    <form class="Calculator">
+        <h1>2020 Inverse income tax calculator</h1>
+        <div class="CalculatorField">
+            <input type="number" id="income" name="Starting balance" class="NumberEntry" placeholder=" ">
+            <label for="NumberEntry" class="InputLabel">Desired income</label>
+            <span class="FormInputUnderline"></span>
+        </div>
+
+        <div class="CalculatorField">
+            <div
+                title="The standard deduction amount in 2020 is $12,400. If you are not itemizing deductions, use $12,400.">
+                <input type="number" id="deduction" class="NumberEntry" placeholder=" ">
+                <label>Tax deduction</label>
+                <span class="FormInputUnderline"></span>
+            </div>
+        </div>
+
+        <div class="CalculatorField">
+            <input type="text" id="TaxAmount" readonly="readonly" class="NumberEntry" placeholder=" ">
+            <label>Tax bill</label>
+        </div>
+        <div class="CalculatorField">
+            <input type="text" id="PreTaxAmount" readonly="readonly" class="NumberEntry" placeholder=" ">
+            <label>Required pre-tax income</label>
+        </div>
+    </form>
     <script>
         function Render() {
             let income = document.getElementById("income").value;
             let deduction = document.getElementById("deduction").value;
             let tax = CalculatePreTax(income, deduction);
-            document.getElementById("TaxAmount").value = formatMoney(tax.taxamount);
-            document.getElementById("PreTaxAmount").value = formatMoney(tax.pretax);
+            if (tax != null) {
+                document.getElementById("TaxAmount").value = formatMoney(tax.taxamount);
+                document.getElementById("PreTaxAmount").value = formatMoney(tax.pretax);
+            } else {
+                document.getElementById("TaxAmount").value = "";
+                document.getElementById("PreTaxAmount").value = "";
+            }
         }
 
         // Event listeners for form fields gaining focus
-        ["income", "deduction"].forEach(function (item, index, array) {
-            let element = document.getElementById(item);
-            element.addEventListener("focusin", () => { OnFocusIn(element) });
-            element.addEventListener("focusout", () => { OnFocusOut(element) });
-            element.addEventListener("input", () => { Render(); });
+        [].forEach.call(document.getElementsByClassName("NumberEntry"),(item) => {
+            item.addEventListener("input", Render);
         });
         Render();
     </script>
