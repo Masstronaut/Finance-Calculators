@@ -1,0 +1,89 @@
+.entry-field-label,
+.entry-field-input {
+    font-family: "Roboto", "Helvetica", "Arial", sans-serif;
+    font-weight: normal;
+    transition: all 0.3s ease-in-out;
+}
+
+.entry-field-input:hover{
+    
+    border-bottom-color: #616161;
+}
+
+.entry-field-input:focus + .entry-field-label, .entry-field-input:not(:placeholder-shown) + .entry-field-label{
+    color: #00897B;
+    transition: color 200ms cubic-bezier(0.0,0,0.2,1), transform 200ms cubic-bezier(0.0,0,0.2,1) 0ms;
+    transform: translate(0, 1.5px) scale(0.75);
+    transform-origin: top left;
+    top: 0;
+    position: absolute;
+    display: block;
+    padding: 0;
+    font-size: 1rem;
+    font-weight: 400;
+    line-height: 1;
+    letter-spacing: 0.00938em;
+}
+.entry-field-input:not(:focus):not(:placeholder-shown) + .entry-field-label{
+    color: rgba(0, 0, 0, 0.54);
+    transition: color 200ms cubic-bezier(0.0,0,0.2,1), transform 200ms cubic-bezier(0.0,0,0.2,1) 0ms;
+    transform: translate(0, 1.5px) scale(0.75);
+    transform-origin: top left;
+    top: 0;
+    position: absolute;
+    display: block;
+    padding: 0;
+    font-size: 1rem;
+    font-family: "Roboto", "Helvetica", "Arial", sans-serif;
+    font-weight: 400;
+    line-height: 1;
+    letter-spacing: 0.00938em;
+}
+.entry-field-label{
+    transition: color 200ms cubic-bezier(0.0,0,0.2,1) 0ms,transform 200ms cubic-bezier(0.0,0,0.2,1) 0ms;
+    top: 0;
+    left: 2%;
+    position: absolute;
+    transform: translate(0, 100%) scale(1);
+    display: inline-block;
+    transform-origin: top left;
+    color:rgba(0, 0, 0, 0.54);
+    padding: 0;
+    font-size: 1rem;
+    font-family: "Roboto", "Helvetica", "Arial", sans-serif;
+    font-weight: 400;
+    line-height: 1;
+    letter-spacing: 0.00938em;
+    pointer-events: none;
+}
+.entry-field-input:focus {
+    outline: none;
+}
+.entry-field-container {
+    position: relative;
+    margin: 10px 10%;
+    font-size: 16px;
+}
+.entry-field-input {
+    border: 0;
+    padding: 13px 0 2px 2%;
+    border-bottom: 2px solid #cccccc;
+    font-size: 16px;
+    width: 100%;
+    border-radius: 3px;
+}
+
+.entry-field-input~.entry-field-underline {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 0;
+    height: 2px;
+    background-color: #00897B;
+    transition: 0.2s width ease-in-out;
+}
+
+.entry-field-input:focus~.entry-field-underline {
+    width: 100%;
+    transition: 0.35s width ease-in-out;
+}

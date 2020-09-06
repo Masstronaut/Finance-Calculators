@@ -5,31 +5,16 @@
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400&display=swap" rel="stylesheet">
     <link href="calccommon.css" type="text/css" rel="stylesheet">
     <script type="text/javascript" src="calccommon.js"></script>
+    <script type="text/javascript" src="entry-field.js"></script>
 </head>
 
 <body>
     <form class="Calculator">
         <h1>2020 Income tax calculator</h1>
-        <div class="CalculatorField">
-            <input type="number" class="NumberEntry" id="income" name="Starting balance" placeholder=" ">
-            <label for="NumberEntry" class="InputLabel">Pre-tax income</label>
-            <span class="FormInputUnderline"></span>
-        </div>
-        <div class="CalculatorField" title="The standard deduction amount in 2020 is $12,400. If you are not itemizing, leave the value at 12400.">
-            <input type="number" class="NumberEntry" id="deduction" placeholder=" " value="12400">
-            <label for="NumberEntry" class="InputLabel">Tax deductions</label>
-            <span class="FormInputUnderline"></span>
-        </div>
-        <div class="CalculatorField">
-            <input type="text" class="NumberEntry" id="TaxAmount" readonly="readonly" placeholder=" ">
-            <label for="NumberEntry" class="InputLabel">Tax amount</label>
-            <span class="FormInputUnderline"></span>    
-        </div>
-        <div class="CalculatorField">
-            <input type="text" class="NumberEntry" id="PostTaxAmount" readonly="readonly" placeholder=" ">
-            <label for="NumberEntry" class="InputLabel">Post-tax income</label>
-            <span class="FormInputUnderline"></span>    
-        </div>
+        <entry-field type="number" class="NumberEntry" id="income" label="Pre-tax income"></entry-field>
+        <entry-field type="number" class="NumberEntry" id="deduction" label="Tax deductions" title="The standard deduction amount in 2020 is $12,400. If you are not itemizing, leave the value at 12400."></entry-field>
+        <entry-field type="text" class="NumberEntry" id="TaxAmount" label="Tax amount" readonly></entry-field>
+        <entry-field type="text" class="NumberEntry" id="PostTaxAmount" label="Post-tax income" readonly></entry-field>
     </form>
     <script>
         function Render() {

@@ -5,34 +5,17 @@
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400&display=swap" rel="stylesheet">
     <link href="calccommon.css" type="text/css" rel="stylesheet">
     <script type="text/javascript" src="calccommon.js"></script>
+    <script type="text/javascript" src="entry-field.js"></script>
 </head>
 
 <body>
-    <form class="Calculator">
+    <form class="Calculator" id="pretaxcalc">
         <h1>2020 Inverse income tax calculator</h1>
-        <div class="CalculatorField">
-            <input type="number" id="income" name="Starting balance" class="NumberEntry" placeholder=" ">
-            <label for="NumberEntry" class="InputLabel">Desired income</label>
-            <span class="FormInputUnderline"></span>
-        </div>
-
-        <div class="CalculatorField">
-            <div
-                title="The standard deduction amount in 2020 is $12,400. If you are not itemizing deductions, use $12,400.">
-                <input type="number" id="deduction" class="NumberEntry" placeholder=" ">
-                <label>Tax deduction</label>
-                <span class="FormInputUnderline"></span>
-            </div>
-        </div>
-
-        <div class="CalculatorField">
-            <input type="text" id="TaxAmount" readonly="readonly" class="NumberEntry" placeholder=" ">
-            <label>Tax bill</label>
-        </div>
-        <div class="CalculatorField">
-            <input type="text" id="PreTaxAmount" readonly="readonly" class="NumberEntry" placeholder=" ">
-            <label>Required pre-tax income</label>
-        </div>
+        <entry-field title="This is a test title." class="NumberEntry" type="number" id="income" label="Desired income"></entry-field>
+        <entry-field type="number" id="deduction" class="NumberEntry" label="Deduction"></entry-field>
+        
+        <entry-field type="text" id="TaxAmount" tabindex=-1 readonly="readonly" label="Tax amount"></entry-field>
+        <entry-field type="text" id="PreTaxAmount" tabindex=-1 readonly="readonly" label="Required income"></entry-field>
     </form>
     <script>
         function Render() {
@@ -49,7 +32,7 @@
         }
 
         // Event listeners for form fields gaining focus
-        [].forEach.call(document.getElementsByClassName("NumberEntry"),(item) => {
+        [].forEach.call(document.getElementsByClassName("NumberEntry"), (item) => {
             item.addEventListener("input", Render);
         });
         Render();

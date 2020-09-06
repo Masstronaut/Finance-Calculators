@@ -4,36 +4,17 @@
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400&display=swap" rel="stylesheet">
     <link href="calccommon.css" type="text/css" rel="stylesheet">
     <script type="text/javascript" src="calccommon.js"></script>
+    <script type="text/javascript" src="entry-field.js"></script>
 </head>
 
 <body>
     <form class="Calculator">
         <h1>Compound interest calculator</h1>
-        <div class="CalculatorField">
-            <input type="number" class="NumberEntry" id="StartingBalance" name="Starting balance" placeholder=" ">
-            <label for="NumberEntry">Initial balance</label>
-            <span class="FormInputUnderline"></span>
-        </div>
-        <div class="CalculatorField">
-            <input type="number" class="NumberEntry" id="InterestRate" name="Interest-rate" placeholder=" ">
-            <label for="NumberEntry">Interest rate (%)</label>
-            <span class="FormInputUnderline"></span>
-        </div>
-        <div class="CalculatorField">
-            <input type="number" class="NumberEntry" id="InflationRate" name="Inflation-rate" placeholder=" ">
-            <label for="NumberEntry">Inflation rate (%)</label>
-            <span class="FormInputUnderline"></span>
-        </div>
-        <div class="CalculatorField" title="How many years should the interest be compounded for?">
-            <input type="number" class="NumberEntry" id="CompoundingPeriod" name="Compounding period" placeholder=" ">
-            <label for="NumberEntry">Years</label>
-            <span class="FormInputUnderline"></span>
-        </div>
-        <div class="CalculatorField">
-            <input type="text" class="NumberEntry" id="EndingBalance" readonly="readonly" placeholder=" ">
-            <label for="NumberEntry">Ending balance</label>
-            <span class="FormInputUnderline"></span>
-        </div>
+        <entry-field type="number" class="NumberEntry" id="StartingBalance" label="Starting balance"></entry-field>
+        <entry-field type="number" class="NumberEntry" id="InterestRate" label="Interest rate (%)"></entry-field>
+        <entry-field type="number" class="NumberEntry" id="InflationRate" label="Inflation rate (%)"></entry-field>
+        <entry-field type="number" class="NumberEntry" id="CompoundingPeriod" label="Years"></entry-field>
+        <entry-field type="text" id="EndingBalance" label="Ending balance" readonly></entry-field>
     </form>
     <script>
        
