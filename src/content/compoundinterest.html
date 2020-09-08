@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" type="text/css" href="../elements/elements-common.css">
+    <link href="../app/calccommon.css" type="text/css" rel="stylesheet">
+    <link href="../elements/top-nav.css" type="text/css" rel="stylesheet">
+    <script type="text/javascript" src="../app/calccommon.js"></script>
+    <script type="text/javascript" src="../elements/entry-field.js"></script>
+</head>
+
+<body>
+
+    <div class="TopNavBar" id="navbarcontainer">
+        <a href="#Home">Home</a>
+        <a href="#About">About us</a>
+        <div class="DropDownMenu">
+            <button class="DropDownButton active">Calculators
+                <i class="fa fa-caret-down"></i>
+            </button>
+            <div class="dropdown-content">
+                <a href="earnedincometax.html">Post-tax income (2020)</a>
+                <a href="pretaxincome.html">Pre-tax income (2020)</a>
+                <a href="Inflation.html">Inflation</a>
+                <a href="compoundinterest.html">Compound Interest</a>
+                <a href="mortgage.html">Mortgage</a>
+            </div>
+        </div>
+        <a href="Contact">Contact</a>
+        <a href="javascript:void(0);" class="icon" onclick="MenuOnClick()">&#9776</a>
+    </div>
+
+    <form class="Calculator">
+        <h1>Compound interest calculator</h1>
+        <entry-field type="number" class="NumberEntry" id="StartingBalance" label="Starting balance"></entry-field>
+        <entry-field type="number" class="NumberEntry" id="InterestRate" label="Interest rate (%)"></entry-field>
+        <entry-field type="number" class="NumberEntry" id="InflationRate" label="Inflation rate (%)"></entry-field>
+        <entry-field type="number" class="NumberEntry" id="CompoundingPeriod" label="Years"></entry-field>
+        <entry-field type="text" id="EndingBalance" label="Ending balance" readonly></entry-field>
+    </form>
+    <script>
+
+        function MenuOnClick(){
+            var navElement = document.getElementById("navbarcontainer");
+            if(navElement.className === "TopNavBar"){
+                console.log("Great success");
+                navElement.className +=" responsive";
+            } else {
+                navElement.className = "TopNavBar";
+            }
+        }
+        function Render() {
+            var data = {};
+            data.StartingBalance = ValidateNumber(document.getElementById("StartingBalance").value);
+            data.InterestRate = ValidateNumber(document.getElementById("InterestRate").value);
+            data.InflationRate = ValidateNumber(document.getElementById("InflationRate").value)
+            data.CompoundingPeriod = ValidateNumber(document.getElementById("CompoundingPeriod").value);
+            if (!isNaN(data.StartingBalance) && !isNaN(data.CompoundingPeriod) && !isNaN(data.InterestRate) && !isNaN(data.InflationRate)) {
+                data.InterestRate /= 100;
+                data.InflationRate /= 100;
+            } else {
+                return;
+            }
+
+            let interest = CalculateCompoundInterest(data);
+            console.log(interest);
+            document.getElementById("EndingBalance").value = formatMoney(interest);
+        }
+
+        [].forEach.call(document.getElementsByClassName("NumberEntry"), (item) => {
+            item.addEventListener("input", Render);
+        });
+    </script>
+
+
+
+</body>
+
+</html>

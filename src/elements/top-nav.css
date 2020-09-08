@@ -1,0 +1,116 @@
+body {margin: 0; background: var(--primary-bg-color);}
+input {
+    background: var(--primary-bg-color);
+}
+.TopNavBar {
+    overflow: hidden;
+    border:none;
+    width: 100vw;
+    display: inline-block;
+}
+
+.TopNavBar a, .dropdown-content a, .DropDownMenu .DropDownButton  {
+    float: left;
+    /*overflow: hidden;*/
+    display: block;
+    color: var(--primary-text-color);
+    text-align: center;
+    padding: 10px 16px;
+    text-decoration: none;
+    font-size: 17px;
+    font-family: "Roboto", "Arial", sans-serif;
+    font-weight: normal;
+    border: none;
+    outline: none;
+    margin: 0;
+    border-radius: 1;
+}
+.DropDownMenu .DropDownButton  {
+    float: none;
+    position: relative;
+    overflow: hidden;
+    display: block;
+    color: var(--light-text-color);
+}
+
+.active {
+    background-color: var(--primary-focus-color,#00897B) !important;
+    color: var(--primary-bg-color,white);
+}
+
+.TopNavBar .icon {
+    display: none;
+}
+.DropDownMenu{
+    float: left;
+    overflow: hidden;
+}
+.dropdown-content {
+    display: none;
+    float:left;
+    position: absolute;
+    background-color: var(--entry-bg-color, #f9f9f9);
+    min-width: 160px;
+    box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+    z-index: 1;
+}
+
+.dropdown-content a{
+    float: none;
+    padding: 12px 16px;
+    text-decoration: none;
+    text-align: left;
+}
+
+.TopNavBar a:hover, .DropDownMenu:hover .DropDownButton{
+    background-color: var(--hover-bg-color, #ECECEC);
+    color: var(--hover-highlight-color, #616161);
+}
+
+.dropdown-content a:hover{
+    background-color: var(--hover-bg-color, #ECECEC);
+    color: var(--hover-highlight-color, #616161);
+}
+.DropDownMenu:hover .dropdown-content{
+    display: block;
+}
+
+/*when the screen is <600px wide, hide all links except the first one: 
+Show the link that should open and close the topnav (icon) */
+@media screen and (max-width: 600px) {
+    .TopNavBar a:not(:first-child), .DropDownMenu .DropDownButton{
+        display: none;
+    }
+    .TopNavBar a.icon{
+        float:right;
+        display: block;
+    }
+}
+
+/*
+The responsive class is added to the topnav with JS when the user clicks on the icon.
+The class makes the top nav look good on small screens.
+It displays the links vertically instead of horizontally.
+*/
+
+@media screen and (max-width: 600px) {
+    .TopNavBar.responsive {position: relative;}
+    .TopNavBar.responsive a.icon {
+        position: absolute;
+        right: 0;
+        top:0;
+    }
+    .TopNavBar.responsive a{
+        float:none;
+        display: block;
+        text-align: left;
+    }
+    .TopNavBar.responsive .DropDownMenu{float: none;}
+    .TopNavBar.responsive .dropdown-content {position: relative;}
+    .TopNavBar.responsive .DropDownMenu .DropDownButton {
+        display: block;
+        width: 100%;
+        text-align: left;
+    }
+}
+        
