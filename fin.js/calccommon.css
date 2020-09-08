@@ -16,7 +16,7 @@ h1 {
 
 .Calculator {
     box-sizing: border-box;
-    width: 300px;
+    width: 50%;
     margin: 5% auto 0;
     box-shadow: 2px 2px 5px 1px rgba(0, 0, 0, 0.2);
     padding-bottom: 30px;

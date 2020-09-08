@@ -1,0 +1,12 @@
+:root {
+    --primary-bg-color: #FCFCFC;
+    --primary-accent-color: #9A9A9A;
+    --primary-focus-color: #00897B;
+    --primary-text-color: rgba(0,0,0,.52);
+    --light-text-color: #f2f2f2;
+    
+    --entry-bg-color: #F5F5F5;
+    --hover-highlight-color: #616161;
+    --focus-bg-color: #D9D9D9;
+    --hover-bg-color: #ECECEC;
+}

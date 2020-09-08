@@ -9,19 +9,20 @@ EntryFieldTemplate.innerHTML = `
 }
 
 .entry-field-input:hover{
-    
-    border-bottom-color: #616161;
+    background: var(--hover-bg-color);
+    border-bottom-color: var(--hover-highlight-color, #616161);
 }
-.entry-field-container{
-    display: block !important;
+.entry-field-input:hover + .entry-field-label{
+    transition: color 200ms linear 0s;
+    color: var(--hover-highlight-color, #616161);
 }
 
 .entry-field-input:focus + .entry-field-label, .entry-field-input:not(:placeholder-shown) + .entry-field-label{
-    color: #00897B;
+    color: var(--primary-focus-color, #00897B);
     transition: color 200ms cubic-bezier(0.0,0,0.2,1), transform 200ms cubic-bezier(0.0,0,0.2,1) 0ms;
-    transform: translate(0, 1.5px) scale(0.75);
+    transform: translateY(-106%) scale(0.75);
     transform-origin: top left;
-    top: 0;
+    top: 50%;
     position: absolute;
     display: block;
     padding: 0;
@@ -32,10 +33,9 @@ EntryFieldTemplate.innerHTML = `
 }
 .entry-field-input:not(:focus):not(:placeholder-shown) + .entry-field-label{
     color: rgba(0, 0, 0, 0.54);
-    transition: color 200ms cubic-bezier(0.0,0,0.2,1), transform 200ms cubic-bezier(0.0,0,0.2,1) 0ms;
-    transform: translate(0, 1.5px) scale(0.75);
+    transition: color 200ms cubic-bezier(0.0,0,0.2,1), transform 200ms cubic-bezier(0.4,0,0.2,1) 0ms;
     transform-origin: top left;
-    top: 0;
+
     position: absolute;
     display: block;
     padding: 0;
@@ -46,11 +46,13 @@ EntryFieldTemplate.innerHTML = `
     letter-spacing: 0.00938em;
 }
 .entry-field-label{
-    transition: color 200ms cubic-bezier(0.0,0,0.2,1) 0ms,transform 200ms cubic-bezier(0.0,0,0.2,1) 0ms;
-    top: 0;
-    left: 2%;
+    transition: color 200ms cubic-bezier(0.0,0,0.2,1) 0ms;
+    transition: transform 150ms cubic-bezier(0.4,0,0.2,1) 0ms;
+    top: 50%;
+    left: 16px;
     position: absolute;
-    transform: translate(0, 100%) scale(1);
+    overflow: hidden;
+    transform: translateY(-50%) scale(1);
     display: inline-block;
     transform-origin: top left;
     color:rgba(0, 0, 0, 0.54);
@@ -58,40 +60,74 @@ EntryFieldTemplate.innerHTML = `
     font-size: 1rem;
     font-family: "Roboto", "Helvetica", "Arial", sans-serif;
     font-weight: 400;
-    line-height: 1;
+    line-height: 1.15rem;
     letter-spacing: 0.00938em;
     pointer-events: none;
 }
 .entry-field-input:focus {
     outline: none;
+    background: var(--focus-bg-color);
+    transition: background 200ms cubic-bezier(0.4,0,0.2,1) 0ms;
 }
 .entry-field-container {
     position: relative;
     margin: 10px 10%;
     font-size: 16px;
+    display: block !important;
+    height: 56px;
 }
 .entry-field-input {
+    display: block;
+    box-sizing: border-box;
+    align-self: flex-end;
+    position: relative;
     border: 0;
-    padding: 13px 0 2px 2%;
-    border-bottom: 2px solid #cccccc;
-    font-size: 16px;
+    padding: 20px 16px 6px;
+    background: var(--entry-bg-color);
+    border-bottom: 1px solid var(--primary-accent-color, #9A9A9A);
+    font-size: 1rem;
     width: 100%;
-    border-radius: 3px;
+    height: 100%;
+    border-radius: 4px 4px 0px 0px;
 }
 
-.entry-field-input~.entry-field-underline {
+
+.entry-field-underline{
+    position: relative;
+    display:block;
+    width: 100%;
+}
+
+.entry-field-underline:before, .entry-field-underline:after{
+    height:2px;
+    width:0;
+    bottom:0px;
     position: absolute;
-    bottom: 0;
-    left: 0;
-    width: 0;
-    height: 2px;
-    background-color: #00897B;
-    transition: 0.2s width ease-in-out;
+    background-color: var(--primary-focus-color);
+    transition: 0.2s ease-in all;
+    content:'';
+}
+.entry-field-underline:before{
+    left:50%;
+}
+.entry-field-underline:after{
+    right: 50%;
+}
+.entry-field-input:focus ~ .entry-field-underline:before,
+.entry-field-input:focus ~ .entry-field-underline:after{
+    width:50%;
 }
 
-.entry-field-input:focus~.entry-field-underline {
-    width: 100%;
-    transition: 0.35s width ease-in-out;
+
+/* hide the spinners on number fields */
+input[type="number"]::-webkit-outer-spin-button,
+input[type="number"]::-webkit-inner-spin-button{
+    -webkit-appearance: none;
+    margin: 0;
+}
+/* firefox */
+input[type="number]{
+    -moz-appearance: textfield;
 }
 
 </style>
@@ -99,7 +135,8 @@ EntryFieldTemplate.innerHTML = `
 
 class EntryField extends HTMLElement{
     constructor(){
-        // Always call super first in constructor
+        // Always call super first in constructor. 
+        // super invokes the constructor of the base class.
         super();
         let shadow = this.attachShadow({mode:"open"});
         this.shadow = shadow;
